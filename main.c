@@ -100,16 +100,16 @@ int checkSorted ( int v[], int n) {
     return 1; //1 means sorted
 }
 
-int checkInicialization (int inicialization[], int n) {
+int checkInitialization (int initialization[], int n) {
     int sorted;
     int v1[length],v2[length];
-    printArray(inicialization, n);
-    sorted = checkSorted(inicialization, n);
+    printArray(initialization, n);
+    sorted = checkSorted(initialization, n);
     printf("\nSorted? %d\n", sorted);
     if ( sorted == 0 ) {
         for (int i=0;i<n;i++) {
-            v1[i]=inicialization[i];
-            v2[i]=inicialization[i];
+            v1[i]=initialization[i];
+            v2[i]=initialization[i];
         }
         printf("Insertion Sort:\nSorting...\n");
         InsertionSort(v1, n);
@@ -137,16 +137,15 @@ void test (int a[],int b[],int c[],int n){
     descending_init(b,length);
     random_init(c,length);
     printf("Ascending array:\n");
-    checkInicialization(a,length);
+    checkInitialization(a,length);
     printf("Descending array:\n");
-    checkInicialization(b,length);
+    checkInitialization(b,length);
     printf("Random array:\n");
-    checkInicialization(c,length);
+    checkInitialization(c,length);
 }
 
 void printAlgorithms (double t, int n, int alg, int iterated) {
     double x, y, z;
-
     switch ( alg ) {
         case 0:
             x = t +1;
@@ -159,7 +158,6 @@ void printAlgorithms (double t, int n, int alg, int iterated) {
             z = t +3;
             break;
     }
-
     if (iterated == 1) {
         printf("%12d %15.3fms* %15.6f %15.6f %15.6f\n", n, t, x, y, z);
     } else {
