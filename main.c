@@ -174,21 +174,23 @@ double iterateAlgorithm (int alg, int v[], int n) {
 }
 
 void printAlgorithm (int n, double t, int alg, int it) {
+    int x, y, z;
     if (alg == 0) {
-        int x = 0;
-        int y = 0;
-        int z = 0;
-    } else if (alg == 1) {
-        int x = 1;
-        int y = 1;
-        int z = 1;
+        x = 0;
+        y = 0;
+        z = 0;
+    }
+    if (alg == 1) {
+        x = 1;
+        y = 1;
+        z = 1;
     }
     if (it == 0) {
-        printf("%d\t%f\t%d\t%d\t%d\n", n, t, alg, x, y, z);
+        printf("%d\t%f\t%d\t%d\t%d\n", n, t, x, y, z);
         return;
     }
     if (it == 1) {
-        printf("%d\t*%f\t%d\t%d\t%d\n", n, t, alg, x, y, z);
+        printf("%d\t*%f\t%d\t%d\t%d\n", n, t, x, y, z);
         return;
     }
 }
@@ -201,25 +203,24 @@ void runInsertionSort (int v[], int n){
     t = t2-t1;
     if (t < 500) {
         t = iterateAlgorithm(0, v, n);
-        printAlgorithm(n, v, 0, 1);
+        printAlgorithm(n, t, 0, 1);
         return;
     }
-    printAlgorithm(n, v, 0, 0);
+    printAlgorithm(n, t, 0, 0);
 }
 
 void runQuickSort (int v[], int n){
     double t,t1,t2;
-    printf("\nn\tt(n)\tx\ty\tz\n");
     t1 = microsegundos();
     InsertionSort(v, n);
     t2 = microsegundos();
     t = t2-t1;
     if (t < 500) {
         t = iterateAlgorithm(1, v, n);
-        printAlgorithm(n, v, 1, 1);
+        printAlgorithm(n, t, 1, 1);
         return;
     }
-    printAlgorithm(n, v, 1, 0);
+    printAlgorithm(n, t, 1, 0);
 }
 
 void runAlgorithms () {
@@ -265,4 +266,5 @@ void runAlgorithms () {
 int main () {
     int a[length], b[length], c[length];
     test(a, b, c, length);
+    runAlgorithms();
 }
