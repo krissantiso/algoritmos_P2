@@ -145,6 +145,35 @@ void test (int a[],int b[],int c[],int n){
     checkInicialization(c,length);
 }
 
+double iterateAlgorithm (int alg,int v[],int n){
+    double t,t1,t2;
+    t1 = microsegundos();
+    if (alg==0){
+        for (int i=0; i< iterations; i++){
+            InsertionSort(v,n);
+        }
+    }
+    if (alg==1){
+        for (int i=0; i< iterations; i++){
+            QuickSort(v,n);
+        }
+    }
+    t2 = microsegundos();
+    t = t2 - t1;
+    return (double)t/iterations;
+}
+
+void runInsertionSort (int v[],int n){
+    double t,t1,t2;
+    t1 = microsegundos();
+    InsertionSort(v,n);
+    t2 = microsegundos();
+    t = t2-t1;
+    if (t < 500){
+        t = iterateAlgorithm(0,v,n);
+    }
+}
+
 int main(){
     int a[length],b[length],c[length];
     test(a,b,c,length);
