@@ -232,7 +232,7 @@ void runAlgoritms () {
         int v[n]; ascending_init(v, n);
         runQuickSort(v, n);
     }
-    printf("Quick Sort with random initialization\n");
+    printf("Quick Sort with unsorted initialization\n");
     printf("\tn\t\tTime\t    Underest.\t\tTight\t\tOverest.\n");
     for (int n = 500; n <= 32000; n = n*2) {
         int v[n]; random_init(v, n);
@@ -250,7 +250,7 @@ void runAlgoritms () {
         int v[n]; ascending_init(v, n);
         runInsertionSort(v, n);
     }
-    printf("Insertion Sort with random initialization\n");
+    printf("Insertion Sort with unsorted initialization\n");
     printf("\tn\t\tTime\t    Underest.\t\tTight\t\tOverest.\n");
     for (int n = 500; n <= 32000; n = n*2) {
         int v[n]; random_init(v, n);
