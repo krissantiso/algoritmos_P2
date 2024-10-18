@@ -5,8 +5,7 @@
 #include <time.h>
 
 #define checkAlg 'y'
-#define algCalculated 0
-#define length 40
+#define length 10
 #define iterations 1000
 
 //time functions:
@@ -34,6 +33,7 @@ void descending_init (int v [], int n) {
 }
 
 void random_init (int v[],int n){
+    init_seed();
     int i, m=2*n+1;
     for (i=0; i < n; i++)
         v[i] = (rand() % m) - n;
@@ -133,7 +133,6 @@ int checkInicialization (int inicialization[], int n) {
 }
 
 void test (int a[],int b[],int c[],int n){
-    init_seed();
     ascending_init(a,length);
     descending_init(b,length);
     random_init(c,length);
@@ -145,7 +144,116 @@ void test (int a[],int b[],int c[],int n){
     checkInicialization(c,length);
 }
 
+void printAlgorithms (double t, int n, int alg, int iterated) {
+    double x, y, z;
+
+    switch ( alg ) {
+        case 0:
+            x = t +1;
+            y = t +2;
+            z = t +3;
+            break;
+        case 1:
+            x = t +1;
+            y = t +2;
+            z = t +3;
+            break;
+    }
+
+    if (iterated == 1) {
+        printf("%12d %15.3fms* %15.6f %15.6f %15.6f\n", n, t, x, y, z);
+    } else {
+        printf("%12d %15.3fms  %15.6f %15.6f %15.6f\n", n, t, x, y, z);
+    }
+
+}
+
+double iterateAlgorithms (int alg, int v[], int n, int fIterations) {
+    double t1 = 0, t2 = 0;
+    switch (alg) {
+        case 0:
+            t1 = microsegundos();
+            for ( int i = 0; i < fIterations; i++) {
+                QuickSort(v, n);
+            }
+            t2 = microsegundos();
+            break;
+        case 1:
+            t1 = microsegundos();
+            for ( int i = 0; i < fIterations; i++) {
+                InsertionSort(v, n);
+            }
+            t2 = microsegundos();
+            break;
+    }
+    return (t2 - t1) / fIterations;
+}
+
+void runQuickSort(int v[], int n){
+    double t = 0, t1 = 0, t2 = 0, iterated = 0;
+
+    t1 = microsegundos();
+    QuickSort(v, n);
+    t2 = microsegundos();
+    t = t2-t1;
+    if (t < 500) {
+        t = iterateAlgorithms(0, v, n, iterations);
+        iterated = 1;
+    }
+    printAlgorithms (t, n, 0, iterated);
+}
+
+void runInsertionSort(int v[], int n){
+    double t = 0, t1 = 0, t2 = 0, iterated = 0;
+
+    t1 = microsegundos();
+    InsertionSort(v, n);
+    t2 = microsegundos();
+    t = t2-t1;
+    if (t < 500) {
+        t = iterateAlgorithms(1, v, n, iterations);
+        iterated = 1;
+    }
+    printAlgorithms (t, n, 1, iterated);
+}
+
+void runAlgoritms(){
+    printf("Quick Sort with descending initialization\n\tn\t\tTime\t\tUnderest.\tTight\t\tOverest.\n");
+    for (int n = 500; n <= 32000; n = n*2) {
+        int v[n]; descending_init(v, n);
+        runQuickSort(v, n);
+    }
+    printf("Quick Sort with ascending initialization\n\tn\t\tTime\t\tUnderest.\tTight\t\tOverest.\n");
+    for (int n = 500; n <= 32000; n = n*2) {
+        int v[n]; ascending_init(v, n);
+        runQuickSort(v, n);
+    }
+    printf("Quick Sort with random initialization\n\tn\t\tTime\t\tUnderest.\tTight\t\tOverest.\n");
+    for (int n = 500; n <= 32000; n = n*2) {
+        int v[n]; random_init(v, n);
+        runQuickSort(v, n);
+    }
+    printf("Insertion Sort with descending initialization\n\tn\t\tTime\t\tUnderest.\tTight\t\tOverest.\n");
+    for (int n = 500; n <= 32000; n = n*2) {
+        int v[n]; descending_init(v, n);
+        runInsertionSort(v, n);
+    }
+    printf("Insertion Sort with ascending initialization\n\tn\t\tTime\t\tUnderest.\tTight\t\tOverest.\n");
+    for (int n = 500; n <= 32000; n = n*2) {
+        int v[n]; ascending_init(v, n);
+        runInsertionSort(v, n);
+    }
+    printf("Insertion Sort with random initialization\n\tn\t\tTime\t\tUnderest.\tTight\t\tOverest.\n");
+    for (int n = 500; n <= 32000; n = n*2) {
+        int v[n]; random_init(v, n);
+        runInsertionSort(v, n);
+    }
+}
+
 int main(){
-    int a[length],b[length],c[length];
-    test(a,b,c,length);
+    if ( checkAlg == 'y' ) {
+        int a[length],b[length],c[length];
+        test(a,b,c,length);
+    }
+    runAlgoritms();
 }
