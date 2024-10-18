@@ -6,7 +6,7 @@
 
 #define checkAlg 'y'
 #define algCalculated 0
-#define length 10
+#define length 40
 #define iterations 1000
 
 //time functions:
@@ -111,14 +111,15 @@ int checkInicialization (int inicialization[], int n) {
             v1[i]=inicialization[i];
             v2[i]=inicialization[i];
         }
-        printf("Insertion Sort:\n");
-        printf("Sorting...\n");
+        printf("Insertion Sort:\nSorting...\n");
         InsertionSort(v1, n);
         printArray(v1, n);
         sorted = checkSorted(v1, n);
         printf("\nSorted? %d\n", sorted);
-        printf("Quick Sort:\n");
-        printf("Sorting...\n");
+        if ( sorted == 0 ) {
+            return 0;
+        }
+        printf("Quick Sort:\nSorting...\n");
         QuickSort(v2, n);
         printArray(v2, n);
         sorted = checkSorted(v2, n);
