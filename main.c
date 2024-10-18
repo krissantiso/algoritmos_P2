@@ -37,6 +37,7 @@ void descending_init (int v [], int n) {
 }
 
 void random_init (int v[], int n) {
+    init_seed();
     int i, m=2*n+1;
     for (i=0; i < n; i++) {
         v[i] = (rand() % m) - n;
@@ -140,8 +141,7 @@ int checkInitialization (int initialization[], int n) {
     return 1;
 }
 
-void test (int a[], int b[], int c[], int n){
-    init_seed();
+void test (int a[], int b[], int c[], int n) {
     ascending_init(a, length);
     descending_init(b, length);
     random_init(c, length);
@@ -153,32 +153,112 @@ void test (int a[], int b[], int c[], int n){
     checkInitialization(c, length);
 }
 
-double iterateAlgorithm (int alg, int v[], int n){
-    double t,t1,t2;
-    t1 = microsegundos();
-    if (alg==0){
-        for (int i=0; i< iterations; i++){
-            InsertionSort(v,n);
+double iterateAlgorithm (int alg, int v[], int n) {
+    double t, t1, t2;
+    if (alg == 0) {
+        t1 = microsegundos();
+        for (int i = 0; i < iterations; i++) {
+            InsertionSort(v, n);
         }
+        t2 = microsegundos();
     }
-    if (alg==1){
-        for (int i=0; i< iterations; i++){
-            QuickSort(v,n);
+    if (alg == 1) {
+        t1 = microsegundos();
+        for (int i = 0; i < iterations; i++){
+            QuickSort(v, n);
         }
+        t2 = microsegundos();
     }
-    t2 = microsegundos();
     t = t2 - t1;
-    return (double)t / iterations;
+    return t / iterations;
 }
 
-void runInsertionSort (int v[],int n){
+void printAlgorithm (int n, double t, int alg, int it) {
+    if (alg == 0) {
+        int x = 0;
+        int y = 0;
+        int z = 0;
+    } else if (alg == 1) {
+        int x = 1;
+        int y = 1;
+        int z = 1;
+    }
+    if (it == 0) {
+        printf("%d\t%f\t%d\t%d\t%d\n", n, t, alg, x, y, z);
+        return;
+    }
+    if (it == 1) {
+        printf("%d\t*%f\t%d\t%d\t%d\n", n, t, alg, x, y, z);
+        return;
+    }
+}
+
+void runInsertionSort (int v[], int n){
     double t,t1,t2;
     t1 = microsegundos();
-    InsertionSort(v,n);
+    InsertionSort(v, n);
     t2 = microsegundos();
     t = t2-t1;
-    if (t < 500){
-        t = iterateAlgorithm(0,v,n);
+    if (t < 500) {
+        t = iterateAlgorithm(0, v, n);
+        printAlgorithm(n, v, 0, 1);
+        return;
+    }
+    printAlgorithm(n, v, 0, 0);
+}
+
+void runQuickSort (int v[], int n){
+    double t,t1,t2;
+    printf("\nn\tt(n)\tx\ty\tz\n");
+    t1 = microsegundos();
+    InsertionSort(v, n);
+    t2 = microsegundos();
+    t = t2-t1;
+    if (t < 500) {
+        t = iterateAlgorithm(1, v, n);
+        printAlgorithm(n, v, 1, 1);
+        return;
+    }
+    printAlgorithm(n, v, 1, 0);
+}
+
+void runAlgorithms () {
+    int n;
+    printf("\nInsertion Sort with ascending initialization");
+    printf("\nn\tt(n)\tUnderst\tTight\tOverst\n");
+    for (n = 500; n <= 32000; n = n*2) {
+        int v[n]; ascending_init(v,n);
+        runInsertionSort(v,n);
+    }
+    printf("\nInsertion Sort with descending initialization");
+    printf("\nn\tt(n)\tUnderst\tTight\tOverst\n");
+    for (n = 500; n <= 32000; n = n*2) {
+        int v[n]; descending_init(v,n);
+        runInsertionSort(v,n);
+    }
+    printf("\nInsertion Sort with unsorted initialization");
+    printf("\nn\tt(n)\tUnderst\tTight\tOverst\n");
+    for (n = 500; n <= 32000; n = n*2) {
+        int v[n]; random_init(v,n);
+        runInsertionSort(v,n);
+    }
+    printf("\nQuick Sort with ascending initialization");
+    printf("\nn\tt(n)\tUnderst\tTight\tOverst\n");
+    for (n = 500; n <= 32000; n = n*2) {
+        int v[n]; ascending_init(v,n);
+        runQuickSort(v,n);
+    }
+    printf("\nQuick Sort with descending initialization");
+    printf("\nn\tt(n)\tUnderst\tTight\tOverst\n");
+    for (n = 500; n <= 32000; n = n*2) {
+        int v[n]; descending_init(v,n);
+        runQuickSort(v,n);
+    }
+    printf("\nQuick Sort with unsorted initialization");
+    printf("\nn\tt(n)\tUnderst\tTight\tOverst\n");
+    for (n = 500; n <= 32000; n = n*2) {
+        int v[n]; random_init(v,n);
+        runQuickSort(v,n);
     }
 }
 
