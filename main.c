@@ -4,60 +4,62 @@
 #include <math.h>
 #include <time.h>
 
-#define checkAlg 'y'
+//test teh algorithms: y/n
+#define checkAlg 'n'
 #define length 10
 #define iterations 1000
 
 //time functions:
-double microsegundos() {
+double microsegundos () {
     struct timeval t;
-    if (gettimeofday(&t, NULL) < 0 )
+    if (gettimeofday (&t, NULL) < 0) {
         return 0.0;
+    }
     return (t.tv_usec + t.tv_sec * 1000000.0);
 }
 
-void init_seed() {
+void init_seed () {
     srand(time(NULL));
 }
 
-void ascending_init (int v [], int n) {
+void ascending_init (int v[], int n) {
     int i;
-    for (i=0; i < n; i++)
+    for (i = 0; i < n; i++)
         v[i] = i;
 }
 
-void descending_init (int v [], int n) {
+void descending_init (int v[], int n) {
     int i;
     for (i=0; i < n; i++)
         v[i] = n-i;
 }
 
-void random_init (int v[],int n){
+void random_init (int v[], int n) {
     init_seed();
-    int i, m=2*n+1;
+    int i, m = 2*n+1;
     for (i=0; i < n; i++)
         v[i] = (rand() % m) - n;
 }
 
-void printArray(int v[], int n) {
+void printArray (int v[], int n) {
     for (int i = 0; i < n; i++) {
         printf("%d ", v[i]);
     }
 }
 
-void swap (int a,int b, int v[]){
+void swap (int a, int b, int v[]){
     int aux;
     aux = v[a];
     v[a] = v[b];
     v[b] = aux;
 }
 
-void InsertionSort (int v[],int n){
-    int x,j;
-    for (int i=1;i<n;i++){
-        x=v[i];
-        j=i-1;
-        while((j>=0)&&(v[j]>x)){
+void InsertionSort (int v[], int n){
+    int x, j;
+    for (int i = 1; i < n; i++){
+        x = v[i];
+        j = i-1;
+        while (j >= 0 && v[j] > x){
             v[j+1] = v[j];
             j = j-1;
         }
@@ -65,33 +67,37 @@ void InsertionSort (int v[],int n){
     }
 }
 
-void QuickSortAux (int v[],int left,int right){
-    if (left<right){
-        int x=rand() % (right - left + 1) + left;
+void QuickSortAux (int v[], int left, int right) {
+    if (left < right){
+        int x = rand() % (right - left + 1) + left;
         int pivot= v[x];
-        swap (left,x,v);
+        swap(left, x, v);
         int i = left+1;
         int j = right;
-        while (i<=j) {
-            while ((i<=right)&&(v[i]<pivot)) {i++;}
-            while (v[j]>pivot) {j--;}
-            if (i<=j){
-                swap (i,j,v);
+        while (i <= j) {
+            while (i <= right && v[i] < pivot) {
+                i++;
+            }
+            while (v[j] > pivot) {
+                j--;
+            }
+            if (i <= j){
+                swap(i, j, v);
                 i++;
                 j--;
             }
         }
-        swap(left,j,v);
-        QuickSortAux(v,left,j-1);
-        QuickSortAux(v,j+1,right);
+        swap(left, j, v);
+        QuickSortAux(v, left, j-1);
+        QuickSortAux(v, j+1, right);
     }
 }
 
-void QuickSort(int v[],int n){
+void QuickSort (int v[], int n) {
     QuickSortAux(v,0,n-1);
 }
 
-int checkSorted ( int v[], int n) {
+int checkSorted (int v[], int n) {
     for (int i = 1; i < n; i++) {
         if ( v[i-1] > v[i] ) {
             return 0; //0 means not sorted
@@ -132,7 +138,7 @@ int checkInitialization (int initialization[], int n) {
     return 1;
 }
 
-void test (int a[],int b[],int c[],int n){
+void test (int a[], int b[], int c[], int n) {
     ascending_init(a,length);
     descending_init(b,length);
     random_init(c,length);
@@ -147,21 +153,21 @@ void test (int a[],int b[],int c[],int n){
 void printAlgorithms (double t, int n, int alg, int iterated) {
     double x, y, z;
     switch ( alg ) {
-        case 0:
-            x = t +1;
-            y = t +2;
-            z = t +3;
+        case 0: //Quicksort
+            x = t / pow(n, 1.8);
+            y = t / pow(n, 2.0);
+            z = t / pow(n, 2.2);
             break;
-        case 1:
-            x = t +1;
-            y = t +2;
-            z = t +3;
+        case 1: //InsertionSort
+            x = t / pow(n, 1.8);
+            y = t / pow(n, 2.0);
+            z = t / pow(n, 2.2);
             break;
     }
     if (iterated == 1) {
-        printf("%12d %15.3fms* %15.6f %15.6f %15.6f\n", n, t, x, y, z);
+        printf("%12d %15.3fms* %15.12f %15.12f %15.12f\n", n, t, x, y, z);
     } else {
-        printf("%12d %15.3fms  %15.6f %15.6f %15.6f\n", n, t, x, y, z);
+        printf("%12d %15.3fms  %15.12f %15.12f %15.12f\n", n, t, x, y, z);
     }
 
 }
@@ -187,9 +193,8 @@ double iterateAlgorithms (int alg, int v[], int n, int fIterations) {
     return (t2 - t1) / fIterations;
 }
 
-void runQuickSort(int v[], int n){
+void runQuickSort (int v[], int n) {
     double t = 0, t1 = 0, t2 = 0, iterated = 0;
-
     t1 = microsegundos();
     QuickSort(v, n);
     t2 = microsegundos();
@@ -201,9 +206,8 @@ void runQuickSort(int v[], int n){
     printAlgorithms (t, n, 0, iterated);
 }
 
-void runInsertionSort(int v[], int n){
+void runInsertionSort (int v[], int n) {
     double t = 0, t1 = 0, t2 = 0, iterated = 0;
-
     t1 = microsegundos();
     InsertionSort(v, n);
     t2 = microsegundos();
@@ -215,40 +219,46 @@ void runInsertionSort(int v[], int n){
     printAlgorithms (t, n, 1, iterated);
 }
 
-void runAlgoritms(){
-    printf("Quick Sort with descending initialization\n\tn\t\tTime\t\tUnderest.\tTight\t\tOverest.\n");
+void runAlgoritms () {
+    printf("Quick Sort with descending initialization\n");
+    printf("\tn\t\tTime\t    Underest.\t\tTight\t\tOverest.\n");
     for (int n = 500; n <= 32000; n = n*2) {
         int v[n]; descending_init(v, n);
         runQuickSort(v, n);
     }
-    printf("Quick Sort with ascending initialization\n\tn\t\tTime\t\tUnderest.\tTight\t\tOverest.\n");
+    printf("Quick Sort with ascending initialization\n");
+    printf("\tn\t\tTime\t    Underest.\t\tTight\t\tOverest.\n");
     for (int n = 500; n <= 32000; n = n*2) {
         int v[n]; ascending_init(v, n);
         runQuickSort(v, n);
     }
-    printf("Quick Sort with random initialization\n\tn\t\tTime\t\tUnderest.\tTight\t\tOverest.\n");
+    printf("Quick Sort with random initialization\n");
+    printf("\tn\t\tTime\t    Underest.\t\tTight\t\tOverest.\n");
     for (int n = 500; n <= 32000; n = n*2) {
         int v[n]; random_init(v, n);
         runQuickSort(v, n);
     }
-    printf("Insertion Sort with descending initialization\n\tn\t\tTime\t\tUnderest.\tTight\t\tOverest.\n");
+    printf("Insertion Sort with descending initialization\n");
+    printf("\tn\t\tTime\t    Underest.\t\tTight\t\tOverest.\n");
     for (int n = 500; n <= 32000; n = n*2) {
         int v[n]; descending_init(v, n);
         runInsertionSort(v, n);
     }
-    printf("Insertion Sort with ascending initialization\n\tn\t\tTime\t\tUnderest.\tTight\t\tOverest.\n");
+    printf("Insertion Sort with ascending initialization\n");
+    printf("\tn\t\tTime\t    Underest.\t\tTight\t\tOverest.\n");
     for (int n = 500; n <= 32000; n = n*2) {
         int v[n]; ascending_init(v, n);
         runInsertionSort(v, n);
     }
-    printf("Insertion Sort with random initialization\n\tn\t\tTime\t\tUnderest.\tTight\t\tOverest.\n");
+    printf("Insertion Sort with random initialization\n");
+    printf("\tn\t\tTime\t    Underest.\t\tTight\t\tOverest.\n");
     for (int n = 500; n <= 32000; n = n*2) {
         int v[n]; random_init(v, n);
         runInsertionSort(v, n);
     }
 }
 
-int main(){
+int main () {
     if ( checkAlg == 'y' ) {
         int a[length],b[length],c[length];
         test(a,b,c,length);
