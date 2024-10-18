@@ -2,20 +2,20 @@
 #include <stdlib.h>
 #include <sys/time.h>
 #include <math.h>
+#include <time.h>
 
 #define checkAlg 'y'
 #define algCalculated 0
 #define length 10
 #define iterations 1000
 
-/* //time functions:
+//time functions:
 double microsegundos() {
     struct timeval t;
     if (gettimeofday(&t, NULL) < 0 )
         return 0.0;
     return (t.tv_usec + t.tv_sec * 1000000.0);
 }
- */
 
 void init_seed() {
     srand(time(NULL));
