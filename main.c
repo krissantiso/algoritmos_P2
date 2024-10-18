@@ -23,65 +23,71 @@ void init_seed() {
 
 void ascending_init (int v [], int n) {
     int i;
-    for (i=0; i < n; i++)
+    for (i=0; i < n; i++) {
         v[i] = i;
+    }
 }
 
 void descending_init (int v [], int n) {
     int i;
-    for (i=0; i < n; i++)
+    for (i=0; i < n; i++) {
         v[i] = n-i;
+    }
 }
 
-void random_init (int v[],int n){
+void random_init (int v[], int n) {
     int i, m=2*n+1;
     for (i=0; i < n; i++)
         v[i] = (rand() % m) - n;
 }
 
-void printArray(int v[], int n) {
+void printArray (int v[], int n) {
     for (int i = 0; i < n; i++) {
         printf("%d ", v[i]);
     }
 }
 
-void swap (int a,int b, int v[]){
+void swap (int a, int b, int v[]) {
     int aux;
     aux = v[a];
     v[a] = v[b];
     v[b] = aux;
 }
 
-void InsertionSort (int v[],int n){
+void InsertionSort (int v[], int n) {
     int x,j;
-    for (int i=1;i<n;i++){
+    for (int i = 1; i<n; i++) {
         x=v[i];
-        j=i-1;
-        while((j>=0)&&(v[j]>x)){
+        j = i - 1;
+        while (j >= 0 && v[j] > x) {
             v[j+1] = v[j];
-            j = j-1;
+            j = j - 1;
         }
         v[j+1] = x;
     }
 }
 
-void QuickSortAux (int v[],int left,int right){
-    if (left<right){
+void QuickSortAux (int v[], int left, int right) {
+    if (left < right){
         int x=rand() % (right - left + 1) + left;
         int pivot= v[x];
-        swap (left,x,v);
-        int i = left+1;
+        swap (left, x, v);
+        int i = left + 1;
         int j = right;
-        while (i<=j) {
-            while ((i<=right)&&(v[i]<pivot)) {i++;}
-            while (v[j]>pivot) {j--;}
-            if (i<=j){
+        while (i <= j) {
+            while (i <= right && v[i] < pivot) {
+                i++;
+            }
+            while (v[j] > pivot) {
+                j--;
+            }
+            if (i <= j){
                 swap (i,j,v);
                 i++;
                 j--;
             }
         }
-        swap(left,j,v);
+        swap(left, j, v);
         QuickSortAux(v,left,j-1);
         QuickSortAux(v,j+1,right);
     }
@@ -100,16 +106,16 @@ int checkSorted ( int v[], int n) {
     return 1; //1 means sorted
 }
 
-int checkInicialization (int inicialization[], int n) {
+int checkInitialization (int initialization[], int n) {
     int sorted;
     int v1[length],v2[length];
-    printArray(inicialization, n);
-    sorted = checkSorted(inicialization, n);
+    printArray(initialization, n);
+    sorted = checkSorted(initialization, n);
     printf("\nSorted? %d\n", sorted);
     if ( sorted == 0 ) {
         for (int i=0;i<n;i++) {
-            v1[i]=inicialization[i];
-            v2[i]=inicialization[i];
+            v1[i]=initialization[i];
+            v2[i]=initialization[i];
         }
         printf("Insertion Sort:\nSorting...\n");
         InsertionSort(v1, n);
@@ -138,11 +144,11 @@ void test (int a[],int b[],int c[],int n){
     descending_init(b,length);
     random_init(c,length);
     printf("Ascending array:\n");
-    checkInicialization(a,length);
+    checkInitialization(a,length);
     printf("Descending array:\n");
-    checkInicialization(b,length);
+    checkInitialization(b,length);
     printf("Random array:\n");
-    checkInicialization(c,length);
+    checkInitialization(c,length);
 }
 
 double iterateAlgorithm (int alg,int v[],int n){

@@ -48,7 +48,7 @@ void QuickSortAux ( int v[], int left, int right ) {
     if ( left < right ) {
         x = rand() % (right - left + 1) + left; //es como ponia en la pagina web
         pivot = v[x];
-        swap (v, left, x);   //we need to implement it
+        swap (left, v, x);   //we need to implement it
         i = left + 1;
         j = right;
         while (i <= j) {
@@ -58,8 +58,8 @@ void QuickSortAux ( int v[], int left, int right ) {
             while (v[j] > pivot) {
                 j = j - 1;
             }
-            if ( i <= j) {
-                swap (v[i], v[j]);
+            if (i <= j) {
+                swap (v, i, j);
                 i = i+1;
                 j = j+1;
             }
