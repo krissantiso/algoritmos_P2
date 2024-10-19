@@ -154,9 +154,9 @@ void printAlgorithms (double t, int n, int alg, int iterated) {
     double x, y, z;
     switch ( alg ) {
         case 0: //Quicksort
-            x = t / pow(n, 1.8);
-            y = t / pow(n, 2.0);
-            z = t / pow(n, 2.2);
+            x = 0;
+            y = 0;
+            z = 0;
             break;
         case 1: //InsertionSort
             x = t / pow(n, 1.8);
