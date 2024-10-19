@@ -5,9 +5,9 @@
 #include <time.h>
 
 //test teh algorithms: y/n
-#define checkAlg 'n'
+#define checkAlg 'y'
 #define length 10
-#define iterations 1000
+#define iterations 10000
 
 //time functions:
 double microsegundos () {
@@ -150,50 +150,58 @@ void test (int a[], int b[], int c[], int n) {
     checkInitialization(c,length);
 }
 
-void printAlgorithms (double t, int n, int alg, int iterated) {
+void printAlgorithms (double t, int n, int alg, int init,int iterated) {
     double x, y, z;
-    switch ( alg ) {
-        case 0: //Quicksort
-            x = 0;
-            y = 0;
-            z = 0;
-            break;
-        case 1: //InsertionSort
-            x = t / pow(n, 1.8);
-            y = t / pow(n, 2.0);
-            z = t / pow(n, 2.2);
-            break;
+    if ( alg == 0 ) { //Quicksort
+            if ( init == 0 ) { //descending
+                x = t / log(n); y = t / n; z = t / pow(n, 1.5);
+            }
+            if ( init == 1 ) { //ascending
+                x = t / pow(n, 0.5); y = t / pow(n, 1.1); z = t / pow(n, 2);
+            }
+            if ( init == 2 ) { //random
+                x = t / n; y = t / (n * log(n)); z = t / pow(n, 2.0);
+            }
+    }
+    if ( alg == 1 ) { //InsertionSort
+            if ( init == 0 ) { //descending
+                x = t / pow(n, 1.8); y = t / pow(n, 2); z = t / pow(n, 2.2);
+            }
+            if ( init == 1 ) { //ascending
+                x = t / pow(n, 0.5); y = t / n; z = t / pow(n, 2);
+            }
+            if ( init == 2 ) { //random
+                x = t / (n * log(n)); y = t / pow(n, 2); z = t / pow(n, 3);
+            }
     }
     if (iterated == 1) {
-        printf("%12d %15.3fms* %15.12f %15.12f %15.12f\n", n, t, x, y, z);
+        printf("%12d %20.3fms* %20.12f %20.12f %20.12f\n", n, t, x, y, z);
     } else {
-        printf("%12d %15.3fms  %15.12f %15.12f %15.12f\n", n, t, x, y, z);
+        printf("%12d %20.3fms  %20.12f %20.12f %20.12f\n", n, t, x, y, z);
     }
-
 }
 
-double iterateAlgorithms (int alg, int v[], int n, int fIterations) {
+double iterateAlgorithms (int alg, int v[], int n, double fIterations) {
     double t1 = 0, t2 = 0;
-    switch (alg) {
-        case 0:
-            t1 = microsegundos();
-            for ( int i = 0; i < fIterations; i++) {
-                QuickSort(v, n);
-            }
-            t2 = microsegundos();
-            break;
-        case 1:
-            t1 = microsegundos();
-            for ( int i = 0; i < fIterations; i++) {
-                InsertionSort(v, n);
-            }
-            t2 = microsegundos();
-            break;
+    int i;
+    if (alg == 0) {
+        t1 = microsegundos();
+        for ( i = 0; i < fIterations; i++) {
+            QuickSort(v, n);
+        }
+        t2 = microsegundos();
+    }
+    if (alg == 1) {
+        t1 = microsegundos();
+        for ( i = 0; i < fIterations; i++) {
+            InsertionSort(v, n);
+        }
+        t2 = microsegundos();
     }
     return (t2 - t1) / fIterations;
 }
 
-void runQuickSort (int v[], int n) {
+void runQuickSort (int v[], int n, int initialization) {
     double t = 0, t1 = 0, t2 = 0, iterated = 0;
     t1 = microsegundos();
     QuickSort(v, n);
@@ -203,10 +211,10 @@ void runQuickSort (int v[], int n) {
         t = iterateAlgorithms(0, v, n, iterations);
         iterated = 1;
     }
-    printAlgorithms (t, n, 0, iterated);
+    printAlgorithms (t, n, 0, initialization, iterated);
 }
 
-void runInsertionSort (int v[], int n) {
+void runInsertionSort (int v[], int n, int initialization) {
     double t = 0, t1 = 0, t2 = 0, iterated = 0;
     t1 = microsegundos();
     InsertionSort(v, n);
@@ -216,45 +224,45 @@ void runInsertionSort (int v[], int n) {
         t = iterateAlgorithms(1, v, n, iterations);
         iterated = 1;
     }
-    printAlgorithms (t, n, 1, iterated);
+    printAlgorithms (t, n, 1, initialization, iterated);
 }
 
-void runAlgoritms () {
+void runAlgorithms () {
     printf("Quick Sort with descending initialization\n");
-    printf("\tn\t\tTime\t    Underest.\t\tTight\t\tOverest.\n");
+    printf("\tn\t\t\tTime\t    Underest.\t\tTight\t\t\tOverest.\n");
     for (int n = 500; n <= 32000; n = n*2) {
         int v[n]; descending_init(v, n);
-        runQuickSort(v, n);
+        runQuickSort(v, n, 0);
     }
     printf("Quick Sort with ascending initialization\n");
-    printf("\tn\t\tTime\t    Underest.\t\tTight\t\tOverest.\n");
+    printf("\tn\t\t\tTime\t    Underest.\t\tTight\t\t\tOverest.\n");
     for (int n = 500; n <= 32000; n = n*2) {
         int v[n]; ascending_init(v, n);
-        runQuickSort(v, n);
+        runQuickSort(v, n, 1);
     }
     printf("Quick Sort with unsorted initialization\n");
-    printf("\tn\t\tTime\t    Underest.\t\tTight\t\tOverest.\n");
+    printf("\tn\t\t\tTime\t    Underest.\t\tTight\t\t\tOverest.\n");
     for (int n = 500; n <= 32000; n = n*2) {
         int v[n]; random_init(v, n);
-        runQuickSort(v, n);
+        runQuickSort(v, n, 2);
     }
     printf("Insertion Sort with descending initialization\n");
-    printf("\tn\t\tTime\t    Underest.\t\tTight\t\tOverest.\n");
+    printf("\tn\t\t\tTime\t    Underest.\t\tTight\t\t\tOverest.\n");
     for (int n = 500; n <= 32000; n = n*2) {
         int v[n]; descending_init(v, n);
-        runInsertionSort(v, n);
+        runInsertionSort(v, n, 0);
     }
     printf("Insertion Sort with ascending initialization\n");
-    printf("\tn\t\tTime\t    Underest.\t\tTight\t\tOverest.\n");
+    printf("\tn\t\t\tTime\t    Underest.\t\tTight\n\t\tOverest.\n");
     for (int n = 500; n <= 32000; n = n*2) {
         int v[n]; ascending_init(v, n);
-        runInsertionSort(v, n);
+        runInsertionSort(v, n, 1);
     }
     printf("Insertion Sort with unsorted initialization\n");
-    printf("\tn\t\tTime\t    Underest.\t\tTight\t\tOverest.\n");
+    printf("\tn\t\t\tTime\t    Underest.\t\tTight\t\t\tOverest.\n");
     for (int n = 500; n <= 32000; n = n*2) {
         int v[n]; random_init(v, n);
-        runInsertionSort(v, n);
+        runInsertionSort(v, n, 2);
     }
 }
 
@@ -263,5 +271,5 @@ int main () {
         int a[length],b[length],c[length];
         test(a,b,c,length);
     }
-    runAlgoritms();
+    runAlgorithms();
 }
